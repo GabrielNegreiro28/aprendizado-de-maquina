@@ -16,7 +16,7 @@ Aplicar um pipeline de Aprendizado de Máquina ao `mfeat-zernike` e investigar o
 1. Descrição do conjunto de dados.
 2. Análise exploratória com estatísticas e gráficos.
 3. Discussão dos pré-processamentos.
-4. Treinamento com validação cruzada e ajuste de hiperparâmetros.
+4. Treinamento com validação cruzada aninhada de 10 dobras e ajuste de hiperparâmetros.
 5. Análise dos erros, que é a parte principal do trabalho.
 
 ## Divisão das tarefas
@@ -32,13 +32,13 @@ Aplicar um pipeline de Aprendizado de Máquina ao `mfeat-zernike` e investigar o
 
 ### Gabriel - pré-processamento e modelos
 
-- Separar treino e teste com estratificação.
+- Configurar validação cruzada estratificada externa com 10 dobras e validação cruzada interna para ajuste de hiperparâmetros.
 - Criar pipelines sem vazamento de dados.
 - Aplicar padronização quando necessária.
 - Treinar regressão logística, k-NN, SVM e Random Forest.
-- Ajustar hiperparâmetros com validação cruzada.
-- Comparar acurácia e F1 macro.
-- Entregar previsões e confiança do melhor modelo ao Ryaj.
+- Ajustar hiperparâmetros dentro de cada dobra externa.
+- Comparar acurácia e F1 macro pela média e pelo desvio padrão das dobras externas.
+- Entregar previsões fora da dobra e confiança do melhor modelo ao Ryaj.
 
 ### Ryaj - análise dos erros e conclusões
 
@@ -79,11 +79,10 @@ df["class"] = df["class"].str.decode("utf-8").astype(int)
 
 ### 3. Preparar a avaliação
 
-- Reservar 20% dos dados para teste final.
-- Usar divisão estratificada.
-- Usar validação cruzada com 5 divisões apenas no treino.
+- Usar validação cruzada estratificada externa com 10 divisões.
+- Usar validação cruzada interna para selecionar hiperparâmetros em cada dobra externa.
 - Colocar padronização e modelo no mesmo `Pipeline`.
-- Não usar o teste para escolher hiperparâmetros.
+- Não usar os dados de validação externa para escolher hiperparâmetros.
 
 ### 4. Treinar e comparar modelos
 
@@ -92,7 +91,8 @@ df["class"] = df["class"].str.decode("utf-8").astype(int)
 - k-NN.
 - SVM com kernel RBF.
 - Random Forest.
-- Comparar acurácia, F1 macro e estabilidade.
+- Avaliar cada modelo nas 10 dobras externas.
+- Comparar média e desvio padrão da acurácia e do F1 macro.
 
 ### 5. Analisar os erros
 
@@ -122,9 +122,8 @@ df["class"] = df["class"].str.decode("utf-8").astype(int)
 
 - [ ] As cinco partes exigidas estão no notebook.
 - [ ] Todos os resultados possuem interpretação.
-- [ ] Não há vazamento entre treino e teste.
+- [ ] Não há vazamento entre as dobras de validação cruzada.
 - [ ] Os modelos foram comparados nas mesmas condições.
 - [ ] A análise explica onde e por que ocorrem os erros.
 - [ ] Notebook e PDF executam e abrem corretamente.
 - [ ] Os três integrantes conhecem os resultados gerais.
-
