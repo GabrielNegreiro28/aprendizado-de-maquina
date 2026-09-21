@@ -1,0 +1,13 @@
+# Projeto CMC-15 - mfeat-zernike
+numpy
+pandas
+scipy
+scikit-learn
+matplotlib
+seaborn
+
+# Ambiente de notebook e exportacao
+jupyter
+ipykernel
+notebook
+nbconvert[webpdf]
